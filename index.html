@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy 1st Monthsary, KC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --wine-black:#1b0810;
+    --wine:#3b0e1f;
+    --wine-deep:#5a1430;
+    --gold:#c9a66b;
+    --gold-soft:#e3c78f;
+    --ivory:#f4e9d8;
+    --rose:#c98a9a;
+    --rose-soft:#e6bcc4;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--wine-black);
+    color:var(--ivory);
+    font-family:'Cormorant Garamond', serif;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  ::selection{background:var(--gold-soft);color:var(--wine-black);}
+
+  .label{
+    font-family:'Jost', sans-serif;
+    font-weight:400;
+    letter-spacing:0.35em;
+    text-transform:uppercase;
+    font-size:12px;
+    color:var(--gold-soft);
+  }
+
+  /* ambient candle glow background */
+  .glow{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:0;
+    background:
+      radial-gradient(ellipse 60% 40% at 50% 15%, rgba(201,166,107,0.10), transparent 60%),
+      radial-gradient(ellipse 50% 40% at 20% 80%, rgba(90,20,48,0.35), transparent 60%),
+      radial-gradient(ellipse 50% 40% at 85% 75%, rgba(90,20,48,0.30), transparent 60%);
+    animation:flicker 6s ease-in-out infinite;
+  }
+  @keyframes flicker{
+    0%,100%{opacity:1;}
+    50%{opacity:0.85;}
+  }
+
+  /* floating petals */
+  #petal-canvas{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:5;
+  }
+
+  /* ========== HERO / ENVELOPE ========== */
+  .hero{
+    min-height:100svh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    z-index:2;
+    text-align:center;
+    padding:2rem 1.5rem;
+  }
+
+  .hero .label{margin-bottom:1.2rem;opacity:0;animation:fadeUp 1.2s ease forwards 0.3s;}
+
+  .hero h1{
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    font-weight:600;
+    font-size:clamp(2rem, 6vw, 3.4rem);
+    color:var(--ivory);
+    margin-bottom:2.5rem;
+    opacity:0;
+    animation:fadeUp 1.2s ease forwards 0.6s;
+  }
+
+  .hero h1 span{color:var(--gold-soft);}
+
+  .envelope-wrap{
+    opacity:0;
+    animation:fadeUp 1.2s ease forwards 1s;
+  }
+
+  .envelope{
+    width:min(320px, 78vw);
+    aspect-ratio:3/2;
+    position:relative;
+    cursor:pointer;
+    filter:drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+  }
+
+  .envelope-body{
+    position:absolute;
+    inset:0;
+    background:linear-gradient(160deg, #efe1c8, #e3d0ab);
+    border-radius:4px;
+  }
+
+  .envelope-flap{
+    position:absolute;
+    top:0;left:0;right:0;
+    height:0;
+    border-left:calc(min(320px,78vw)/2) solid transparent;
+    border-right:calc(min(320px,78vw)/2) solid transparent;
+    border-top:calc(min(320px,78vw)*0.42) solid #d9c194;
+    transform-origin:top center;
+    transition:transform 1s cubic-bezier(.6,-0.1,.2,1.4);
+    z-index:3;
+  }
+
+  .envelope.open .envelope-flap{
+    transform:rotateX(180deg);
+  }
+
+  .envelope-shadow-flap{
+    position:absolute;
+    top:0;left:0;right:0;
+    height:0;
+    border-left:calc(min(320px,78vw)/2) solid transparent;
+    border-right:calc(min(320px,78vw)/2) solid transparent;
+    border-top:calc(min(320px,78vw)*0.42) solid #cdb583;
+    z-index:1;
+  }
+
+  .seal{
+    position:absolute;
+    top:38%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:56px;
+    height:56px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #8a2038, #5a1424 70%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Playfair Display', serif;
+    font-weight:700;
+    font-style:italic;
+    font-size:22px;
+    color:var(--gold-soft);
+    z-index:4;
+    box-shadow:0 4px 10px rgba(0,0,0,0.4);
+    transition:transform 0.6s ease, opacity 0.6s ease;
+  }
+
+  .envelope.open .seal{
+    transform:translate(-50%,-50%) scale(0.4) rotate(25deg);
+    opacity:0;
+  }
+
+  .envelope-tap{
+    position:absolute;
+    bottom:-2.6rem;
+    left:50%;
+    transform:translateX(-50%);
+    font-family:'Jost', sans-serif;
+    font-size:11px;
+    letter-spacing:0.3em;
+    text-transform:uppercase;
+    color:var(--rose-soft);
+    white-space:nowrap;
+    animation:pulseTap 2s ease-in-out infinite;
+  }
+  @keyframes pulseTap{
+    0%,100%{opacity:0.55;}
+    50%{opacity:1;}
+  }
+
+  .envelope.open .envelope-tap{display:none;}
+
+  @keyframes fadeUp{
+    from{opacity:0; transform:translateY(18px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  .scroll-hint{
+    position:absolute;
+    bottom:2.2rem;
+    left:50%;
+    transform:translateX(-50%);
+    opacity:0;
+    z-index:2;
+    transition:opacity 0.8s ease 0.4s;
+  }
+  .scroll-hint.show{opacity:0.7;}
+  .scroll-hint span{
+    display:block;
+    width:1px;
+    height:34px;
+    background:linear-gradient(var(--gold-soft), transparent);
+    margin:0 auto;
+    animation:scrollLine 1.8s ease-in-out infinite;
+  }
+  @keyframes scrollLine{
+    0%{transform:scaleY(0); transform-origin:top;}
+    50%{transform:scaleY(1); transform-origin:top;}
+    50.01%{transform-origin:bottom;}
+    100%{transform:scaleY(0); transform-origin:bottom;}
+  }
+
+  /* ========== LETTER OVERLAY ========== */
+  .letter-overlay{
+    position:fixed;
+    inset:0;
+    z-index:50;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:6vh 1.2rem;
+    background:rgba(15,4,9,0.72);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 0.6s ease;
+    overflow-y:auto;
+  }
+  .letter-overlay.show{
+    opacity:1;
+    pointer-events:auto;
+  }
+
+  .letter-card{
+    max-width:520px;
+    width:100%;
+    background:linear-gradient(170deg, #f7ecd9, #eeddbd);
+    color:#3a2417;
+    border-radius:2px;
+    padding:3rem 2.4rem 2.6rem;
+    position:relative;
+    transform:translateY(40px) scale(0.96);
+    opacity:0;
+    transition:transform 0.7s cubic-bezier(.2,.8,.2,1), opacity 0.7s ease;
+    box-shadow:0 30px 70px rgba(0,0,0,0.5);
+  }
+  .letter-overlay.show .letter-card{
+    transform:translateY(0) scale(1);
+    opacity:1;
+  }
+
+  .letter-close{
+    position:absolute;
+    top:14px;
+    right:16px;
+    width:30px;
+    height:30px;
+    border:none;
+    background:none;
+    color:#7a5a3f;
+    font-size:20px;
+    font-family:'Jost', sans-serif;
+    cursor:pointer;
+    line-height:1;
+  }
+
+  .letter-eyebrow{
+    font-family:'Jost', sans-serif;
+    font-size:11px;
+    letter-spacing:0.3em;
+    text-transform:uppercase;
+    color:#a5794f;
+    text-align:center;
+    margin-bottom:1.4rem;
+  }
+
+  .letter-body p{
+    font-size:1.14rem;
+    line-height:1.85;
+    margin-bottom:1.1rem;
+  }
+
+  .letter-body p:first-of-type::first-letter{
+    font-family:'Playfair Display', serif;
+    font-size:2.6rem;
+    font-weight:700;
+    float:left;
+    line-height:0.8;
+    margin:0.12em 0.08em 0 0;
+    color:var(--wine-deep);
+  }
+
+  .letter-sign{
+    margin-top:1.6rem;
+    text-align:right;
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    font-size:1.5rem;
+    color:var(--wine-deep);
+  }
+
+  /* ========== TIMELINE SECTION ========== */
+  .timeline-section{
+    position:relative;
+    z-index:2;
+    padding:6rem 1.5rem 5rem;
+    max-width:760px;
+    margin:0 auto;
+  }
+
+  .section-heading{
+    text-align:center;
+    margin-bottom:3.4rem;
+  }
+  .section-heading .label{display:block;margin-bottom:0.8rem;}
+  .section-heading h2{
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    font-weight:600;
+    font-size:clamp(1.7rem, 4vw, 2.4rem);
+    color:var(--ivory);
+  }
+
+  .milestones{
+    display:flex;
+    flex-direction:column;
+    gap:2.2rem;
+  }
+
+  .milestone{
+    display:grid;
+    grid-template-columns:64px 1fr;
+    gap:1.4rem;
+    opacity:0;
+    transform:translateY(24px);
+    transition:opacity 0.8s ease, transform 0.8s ease;
+  }
+  .milestone.in-view{opacity:1; transform:translateY(0);}
+
+  .milestone-num{
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    font-size:1.9rem;
+    color:var(--gold-soft);
+    text-align:center;
+    padding-top:0.2rem;
+  }
+
+  .milestone-content{
+    border-left:1px solid rgba(201,166,107,0.35);
+    padding-left:1.4rem;
+    padding-bottom:0.4rem;
+  }
+
+  .milestone-content h3{
+    font-family:'Playfair Display', serif;
+    font-weight:600;
+    font-size:1.25rem;
+    color:var(--rose-soft);
+    margin-bottom:0.4rem;
+  }
+
+  .milestone-content p{
+    font-size:1.08rem;
+    line-height:1.7;
+    color:rgba(244,233,216,0.85);
+  }
+
+  /* ========== GALLERY ========== */
+  .gallery-section{
+    position:relative;
+    z-index:2;
+    padding:2rem 1.5rem 6rem;
+    max-width:900px;
+    margin:0 auto;
+  }
+
+  .gallery-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));
+    gap:1.6rem;
+  }
+
+  .frame{
+    background:linear-gradient(170deg, #f7ecd9, #eeddbd);
+    padding:0.7rem 0.7rem 1.6rem;
+    border-radius:2px;
+    box-shadow:0 14px 30px rgba(0,0,0,0.4);
+    transform:rotate(var(--r,0deg));
+    transition:transform 0.35s ease;
+  }
+  .frame:nth-child(1){--r:-3deg;}
+  .frame:nth-child(2){--r:2deg;}
+  .frame:nth-child(3){--r:-1.5deg;}
+  .frame:hover{transform:rotate(0deg) scale(1.03);}
+
+  .frame-photo{
+    aspect-ratio:4/5;
+    width:100%;
+    object-fit:cover;
+    border-radius:1px;
+    display:block;
+  }
+
+  .frame-caption{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:0.95rem;
+    color:#5a4326;
+    text-align:center;
+    margin-top:0.7rem;
+  }
+
+  /* ========== CLOSING ========== */
+  .closing{
+    position:relative;
+    z-index:2;
+    min-height:80vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:5rem 1.5rem;
+  }
+
+  .monogram{
+    width:92px;
+    height:92px;
+    border-radius:50%;
+    border:1px solid var(--gold-soft);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    font-size:1.7rem;
+    color:var(--gold-soft);
+    margin-bottom:2rem;
+  }
+
+  .closing h2{
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    font-weight:600;
+    font-size:clamp(1.8rem, 5vw, 2.8rem);
+    margin-bottom:1rem;
+    color:var(--ivory);
+  }
+
+  .closing p{
+    font-size:1.15rem;
+    color:rgba(244,233,216,0.8);
+    max-width:420px;
+    margin-bottom:2.4rem;
+    line-height:1.7;
+  }
+
+  .heart-btn{
+    background:none;
+    border:1px solid var(--gold-soft);
+    color:var(--gold-soft);
+    font-family:'Jost', sans-serif;
+    font-size:12px;
+    letter-spacing:0.25em;
+    text-transform:uppercase;
+    padding:0.9rem 2.2rem;
+    border-radius:999px;
+    cursor:pointer;
+    transition:background 0.3s ease, color 0.3s ease;
+  }
+  .heart-btn:hover{
+    background:var(--gold-soft);
+    color:var(--wine-black);
+  }
+
+  .footer-note{
+    margin-top:3rem;
+    font-family:'Jost', sans-serif;
+    font-size:11px;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    color:rgba(244,233,216,0.35);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="glow"></div>
+<canvas id="petal-canvas"></canvas>
+
+<!-- HERO -->
+<section class="hero">
+  <span class="label">A little something for you</span>
+  <h1>Happy 1st Monthsary,<br><span>my Lovelove KC</span></h1>
+  <div class="envelope-wrap">
+    <div class="envelope" id="envelope">
+      <div class="envelope-body"></div>
+      <div class="envelope-shadow-flap"></div>
+      <div class="seal">K</div>
+      <div class="envelope-flap"></div>
+    </div>
+    <div class="envelope-tap">tap the seal to open</div>
+  </div>
+  <div class="scroll-hint" id="scrollHint"><span></span></div>
+</section>
+
+<!-- LETTER OVERLAY -->
+<div class="letter-overlay" id="letterOverlay">
+  <div class="letter-card">
+    <button class="letter-close" id="letterClose" aria-label="Close letter">&times;</button>
+    <div class="letter-eyebrow">One month with you</div>
+    <div class="letter-body">
+      <p>My KC, it has only been a month, but you've already made yourself the softest, warmest part of my everyday. I didn't expect one month to feel like this — full, easy, and completely yours.</p>
+      <p>Thank you for the good morning texts, the silly jokes I still think about hours later, and the way you make ordinary days feel like something worth remembering. Every little thing about "us" so far already feels like home.</p>
+      <p>Here's to the version of us that's just getting started — more laughs, more inside jokes, more quiet moments that mean everything. I'm excited for every monthsary after this one.</p>
+      <p>I love you, today and every day since.</p>
+    </div>
+    <div class="letter-sign">— your love</div>
+  </div>
+</div>
+
+<!-- TIMELINE -->
+<section class="timeline-section">
+  <div class="section-heading">
+    <span class="label">Our first month</span>
+    <h2>A few of my favorite moments</h2>
+  </div>
+  <div class="milestones" id="milestones">
+    <div class="milestone">
+      <div class="milestone-num">I</div>
+      <div class="milestone-content">
+        <h3>The day it became "us"</h3>
+        <p>The moment everything felt official — and I remember exactly how happy I was.</p>
+      </div>
+    </div>
+    <div class="milestone">
+      <div class="milestone-num">II</div>
+      <div class="milestone-content">
+        <h3>Our first real conversation that lasted way too long</h3>
+        <p>The one where hours passed and it still felt too short.</p>
+      </div>
+    </div>
+    <div class="milestone">
+      <div class="milestone-num">III</div>
+      <div class="milestone-content">
+        <h3>A random Tuesday that somehow became a core memory</h3>
+        <p>Nothing special was planned, and it turned into one of my favorite days with you.</p>
+      </div>
+    </div>
+    <div class="milestone">
+      <div class="milestone-num">IV</div>
+      <div class="milestone-content">
+        <h3>Today, one month in</h3>
+        <p>Still choosing you, still so happy I get to. Here's to many more.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery-section">
+  <div class="section-heading">
+    <span class="label">Little keepsakes</span>
+    <h2>Swap these for your favorite photos</h2>
+  </div>
+  <div class="gallery-grid">
+    <div class="frame">
+      <img class="frame-photo" src="images/photo1.jpg" alt="Us at the table">
+      <div class="frame-caption">just us, being us</div>
+    </div>
+    <div class="frame">
+      <img class="frame-photo" src="images/photo2.jpg" alt="Us together at the event">
+      <div class="frame-caption">that night out</div>
+    </div>
+    <div class="frame">
+      <img class="frame-photo" src="images/photo3.jpg" alt="Photobooth strip of us">
+      <div class="frame-caption">our photobooth strip</div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING -->
+<section class="closing">
+  <div class="monogram">K</div>
+  <h2>Happy 1st Monthsary</h2>
+  <p>Thank you for one beautiful month, KC. Here's to every month after this one.</p>
+  <button class="heart-btn" id="heartBtn">send a little love</button>
+  <div class="footer-note">made with love, just for you</div>
+</section>
+
+<script>
+  // envelope open logic
+  const envelope = document.getElementById('envelope');
+  const letterOverlay = document.getElementById('letterOverlay');
+  const letterClose = document.getElementById('letterClose');
+  const scrollHint = document.getElementById('scrollHint');
+
+  envelope.addEventListener('click', () => {
+    if (envelope.classList.contains('open')) return;
+    envelope.classList.add('open');
+    setTimeout(() => {
+      letterOverlay.classList.add('show');
+    }, 550);
+  });
+
+  function closeLetter(){
+    letterOverlay.classList.remove('show');
+    scrollHint.classList.add('show');
+  }
+  letterClose.addEventListener('click', closeLetter);
+  letterOverlay.addEventListener('click', (e) => {
+    if (e.target === letterOverlay) closeLetter();
+  });
+
+  // milestone reveal on scroll
+  const milestones = document.querySelectorAll('.milestone');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting){
+        entry.target.classList.add('in-view');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.25 });
+  milestones.forEach(m => io.observe(m));
+
+  // heart button burst
+  const heartBtn = document.getElementById('heartBtn');
+  heartBtn.addEventListener('click', () => {
+    for (let i = 0; i < 18; i++){
+      spawnHeart();
+    }
+  });
+
+  function spawnHeart(){
+    const el = document.createElement('div');
+    el.textContent = '♥';
+    el.style.position = 'fixed';
+    el.style.left = (window.innerWidth/2 + (Math.random()*200-100)) + 'px';
+    el.style.bottom = '15%';
+    el.style.color = Math.random() > 0.5 ? '#e6bcc4' : '#c9a66b';
+    el.style.fontSize = (14 + Math.random()*18) + 'px';
+    el.style.zIndex = 60;
+    el.style.pointerEvents = 'none';
+    el.style.opacity = '1';
+    el.style.transition = 'transform 2.4s ease-out, opacity 2.4s ease-out';
+    document.body.appendChild(el);
+    requestAnimationFrame(() => {
+      const drift = (Math.random()*160 - 80);
+      el.style.transform = `translate(${drift}px, -${300 + Math.random()*220}px) rotate(${Math.random()*60-30}deg)`;
+      el.style.opacity = '0';
+    });
+    setTimeout(() => el.remove(), 2500);
+  }
+
+  // ambient petals
+  const canvas = document.getElementById('petal-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, petals = [];
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function resize(){
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  function makePetal(){
+    return {
+      x: Math.random()*W,
+      y: -20 - Math.random()*H,
+      size: 4 + Math.random()*5,
+      speedY: 0.35 + Math.random()*0.5,
+      speedX: Math.sin(Math.random()*Math.PI),
+      sway: Math.random()*2,
+      angle: Math.random()*Math.PI*2,
+      spin: (Math.random()-0.5)*0.02,
+      hue: Math.random() > 0.5 ? '#e6bcc4' : '#c9a66b'
+    };
+  }
+
+  const petalCount = reduced ? 0 : 22;
+  for (let i=0;i<petalCount;i++) petals.push(makePetal());
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    petals.forEach(p => {
+      p.y += p.speedY;
+      p.x += Math.sin(p.y*0.01)*p.sway*0.3;
+      p.angle += p.spin;
+      if (p.y > H + 20){
+        p.y = -20;
+        p.x = Math.random()*W;
+      }
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.angle);
+      ctx.fillStyle = p.hue;
+      ctx.globalAlpha = 0.55;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, p.size, p.size*0.6, 0, 0, Math.PI*2);
+      ctx.fill();
+      ctx.restore();
+    });
+    if (!reduced) requestAnimationFrame(draw);
+  }
+  draw();
+</script>
+
+</body>
+</html>
